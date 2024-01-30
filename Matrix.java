@@ -1,5 +1,7 @@
-public class Matrix<T extends Number> {
-    T[][] elemsMatrix;
+import java.time.Duration;
+
+public class Matrix<T> {
+    private final T[][] elemsMatrix;
 
     public Matrix(int x, int y) {
         elemsMatrix = (T[][])(new Object[x][y]);
@@ -64,129 +66,241 @@ public class Matrix<T extends Number> {
         return t_matrix;
     }
 
-//    public T determinant() {
-//        if (this.lenRows() != this.lenCols()) {
-//            System.out.println("Problem with determinant matrix");
-//            System.exit(0);
-//        }
-//        T result;
-//
-//        if (this.lenRows() == 1) {
-//            result = this.get(1, 1);
-//        } else if (this.lenRows() == 2) {
-//            result = (this.get(1, 1) * this.get(2, 2)) - (this.get(1, 2) * this.get(2, 1));
-//        } else {
-//            for (int i = 1; i <= this.lenRows(); i++) {
-//                Matrix minor = minorMatrix(i, 1);
-//                T det = minor.determinant();
-//                result += this.get(i, 1) * Math.pow(-1.0, i) * det;
-//            }
-//        }
-//        return result;
-//    }
-//
-//    //multiply
-//    public Matrix mulNum(double elem) {
-//        Matrix newMatrix = new Matrix(lenRows(), lenCols());
-//        for(int i = 1; i <= lenRows(); i++) {
-//            for(int j = 1; j <= lenCols(); j++) {
-//                newMatrix.set(i, j, elem * get(i, j));
-//            }
-//        }
-//        return newMatrix;
-//    }
-//
-//    public Matrix divNum(double elem) {
-//        Matrix newMatrix = new Matrix(lenRows(), lenCols());
-//        for(int i = 1; i <= lenRows(); i++) {
-//            for(int j = 1; j <= lenCols(); j++) {
-//                newMatrix.set(i, j, get(i, j) / elem);
-//            }
-//        }
-//        return newMatrix;
-//    }
-//
-//    public Matrix mulMatrix(Matrix secondMatrix) {
-//        Matrix newMatrix = new Matrix(lenRows(), secondMatrix.lenCols());
-//        double firstElemM, secondElemM;
-//
-//        if(lenCols()!= secondMatrix.lenRows()) {
-//            System.out.println("Problem with multiply matrix");
-//            System.exit(0);
-//        }
-//
-//        for(int i = 1; i <= lenRows(); i++) {
-//            for(int j = 1; j <= secondMatrix.lenCols(); j++) {
-//                double sum = 0;
-//                for(int k = 1; k <= lenCols(); k++) {
-//                    firstElemM = get(i, k);
-//                    secondElemM = secondMatrix.get(k, j);
-//                    sum += firstElemM * secondElemM;
-//                }
-//                newMatrix.set(i, j, sum);
-//            }
-//        }
-//        return newMatrix;
-//    }
-//
-//    //sum
-//    public Matrix sumMatrix(Matrix secondMatrix) {
-//        if((lenRows()!= secondMatrix.lenRows()) || (lenCols()!= secondMatrix.lenCols())) {
-//            System.out.println("problem with sum matrix");
-//            System.exit(0);
-//        }
-//
-//        Matrix newMatrix = new Matrix(lenRows(), lenCols());
-//        double elem;
-//        for(int i = 1; i <= lenRows(); i++) {
-//            for(int j = 1; j <= lenCols(); j++) {
-//                elem = get(i, j);
-//                newMatrix.set(i, j, elem + secondMatrix.get(i, j));
-//            }
-//        }
-//        return newMatrix;
-//    }
+    public Double determinant() {
+        if (this.lenRows() != this.lenCols()) {
+            System.out.println("Problem with determinant matrix");
+            System.exit(0);
+        }
+        Double result = 0.0;
 
-//    public Matrix<T> sumNum(T elem) {
-//        Matrix<T> newMatrix= new Matrix<T>(lenRows(), lenCols());
-//
-//        for(int i = 1; i <= lenRows(); i++) {
-//            for(int j = 1; j <= lenCols(); j++) {
-//                newMatrix.set(i, j, Double.sum((Double) elem, get(i, j)));
-//            }
-//        }
-//        return newMatrix;
-//    }
+        if (this.lenRows() == 1) {
+            result = (Double) this.get(1, 1);
+        } else if (this.lenRows() == 2) {
+            result = ((Double) this.get(1, 1) * (Double) this.get(2, 2)) - ((Double) this.get(1, 2) * (Double) this.get(2, 1));
+        } else {
+            for (int i = 1; i <= this.lenRows(); i++) {
+                Matrix<T> minor = minorMatrix(i, 1);
+                Double det = minor.determinant();
+                result += (Double) this.get(i, 1) * Math.pow(-1.0, i) * det;
+            }
+        }
+        return result;
+    }
+    public ComplexNum determinantCom() {
+        if (this.lenRows() != this.lenCols()) {
+            System.out.println("Problem with determinant matrix");
+            System.exit(0);
+        }
+        ComplexNum result = new ComplexNum();
 
-//    //subtraction
-//    public Matrix subMatrix(Matrix secondMatrix) {
-//        if(lenCols()!= secondMatrix.lenCols() || lenRows() != secondMatrix.lenRows()) {
-//            System.out.println("Problem with subtraction matrix");
-//            System.exit(0);
-//        }
-//
-//        Matrix newMatrix = new Matrix(lenRows(), secondMatrix.lenCols());
-//        for(int i = 1; i <= lenRows(); i++) {
-//            for(int j = 1; j <= secondMatrix.lenCols(); j++) {
-//                newMatrix.set(i, j, this.get(i, j) - secondMatrix.get(i, j));
-//            }
-//        }
-//        return newMatrix;
-//    }
+        if (this.lenRows() == 1) {
+            result = (ComplexNum) this.get(1, 1);
+        } else if (this.lenRows() == 2) {
+            result = (((ComplexNum) this.get(1, 1)).mul((ComplexNum) this.get(2, 2))).sub(((ComplexNum) this.get(1, 2)).mul((ComplexNum) this.get(2, 1)));
+        } else {
+            for (int i = 1; i <= this.lenRows(); i++) {
+                Matrix<T> minor = minorMatrix(i, 1);
+                ComplexNum det = minor.determinantCom();
+                result = result.sum(((ComplexNum) this.get(i, 1)).mulNum(Math.pow(-1.0, i)).mul(det));
+            }
+        }
+        return result;
+    }
 
-//    public Matrix<T> subNum(T elem) {
-//        Matrix<T>  newMatrix= new Matrix<T>(lenRows(), lenCols());
-//
-//        for(int i = 1; i <= lenRows(); i++) {
-//            for(int j = 1; j <= lenCols(); j++) {
-//                T subElem;
-//                subElem = get(i, j) - elem;
-//                newMatrix.set(i, j, subElem);
-//            }
-//        }
-//        return newMatrix;
-//    }
-    public void printMatrix() {
+    //multiply
+    public Matrix<Double> mulNum(Double elem) {
+        Matrix<Double> newMatrix = new Matrix<Double>(lenRows(), lenCols());
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= lenCols(); j++) {
+                newMatrix.set(i, j, elem * (Double) get(i, j));
+            }
+        }
+        return newMatrix;
+    }
+    public Matrix<ComplexNum> mulNum(ComplexNum elem) {
+        Matrix<ComplexNum> newMatrix = new Matrix<ComplexNum>(lenRows(), lenCols());
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= lenCols(); j++) {
+                newMatrix.set(i, j, elem.mul((ComplexNum) get(i, j)));
+            }
+        }
+        return newMatrix;
+    }
+
+    //division
+    public Matrix<Double> divNum(Double elem) {
+        Matrix<Double> newMatrix = new Matrix<Double>(lenRows(), lenCols());
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= lenCols(); j++) {
+                newMatrix.set(i, j, (Double) get(i, j) / elem);
+            }
+        }
+        return newMatrix;
+    }
+    public Matrix<ComplexNum> divNum(ComplexNum elem) {
+        Matrix<ComplexNum> newMatrix = new Matrix<ComplexNum>(lenRows(), lenCols());
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= lenCols(); j++) {
+                newMatrix.set(i, j, ((ComplexNum) get(i, j)).div(elem));
+            }
+        }
+        return newMatrix;
+    }
+
+    public Matrix<Double> mulMatrix(Matrix<Double> secondMatrix) {
+        Matrix<Double> newMatrix = new Matrix<Double>(lenRows(), secondMatrix.lenCols());
+        Double firstElemM, secondElemM;
+
+        if(lenCols()!= secondMatrix.lenRows()) {
+            System.out.println("Problem with multiply matrix");
+            System.exit(0);
+        }
+
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= secondMatrix.lenCols(); j++) {
+                double sum = 0;
+                for(int k = 1; k <= lenCols(); k++) {
+                    firstElemM = (Double) get(i, k);
+                    secondElemM = secondMatrix.get(k, j);
+                    sum += firstElemM * secondElemM;
+                }
+                newMatrix.set(i, j, sum);
+            }
+        }
+        return newMatrix;
+    }
+
+    public Matrix<ComplexNum> mulMatrixCom(Matrix<ComplexNum> secondMatrix) {
+        Matrix<ComplexNum> newMatrix = new Matrix<ComplexNum>(lenRows(), secondMatrix.lenCols());
+        ComplexNum firstElemM = new ComplexNum(), secondElemM = new ComplexNum();
+
+        if(lenCols()!= secondMatrix.lenRows()) {
+            System.out.println("Problem with multiply matrix");
+            System.exit(0);
+        }
+
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= secondMatrix.lenCols(); j++) {
+                ComplexNum sum = new ComplexNum();
+                for(int k = 1; k <= lenCols(); k++) {
+                    firstElemM = (ComplexNum) get(i, k);
+                    secondElemM = secondMatrix.get(k, j);
+                    sum = sum.sum(firstElemM.mul(secondElemM));
+                }
+                newMatrix.set(i, j, sum);
+            }
+        }
+        return newMatrix;
+    }
+
+    //sum
+    public Matrix<Double> sumMatrix(Matrix<Double> secondMatrix) {
+        if((lenRows()!= secondMatrix.lenRows()) || (lenCols()!= secondMatrix.lenCols())) {
+            System.out.println("problem with sum matrix");
+            System.exit(0);
+        }
+
+        Matrix<Double> newMatrix = new Matrix<Double>(lenRows(), lenCols());
+        Double elem;
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= lenCols(); j++) {
+                elem = (Double) get(i, j);
+                newMatrix.set(i, j, elem + secondMatrix.get(i, j));
+            }
+        }
+        return newMatrix;
+    }
+    public Matrix<ComplexNum> sumMatrixCom(Matrix<ComplexNum> secondMatrix) {
+        if((lenRows()!= secondMatrix.lenRows()) || (lenCols()!= secondMatrix.lenCols())) {
+            System.out.println("problem with sum matrix");
+            System.exit(0);
+        }
+
+        Matrix<ComplexNum> newMatrix = new Matrix<ComplexNum>(lenRows(), lenCols());
+        ComplexNum elem = new ComplexNum();
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= lenCols(); j++) {
+                elem = (ComplexNum) get(i, j);
+                newMatrix.set(i, j, elem.sum(secondMatrix.get(i, j)));
+            }
+        }
+        return newMatrix;
+    }
+
+    public Matrix<Double> sumNum(Double elem) {
+        Matrix<Double> newMatrix= new Matrix<Double>(lenRows(), lenCols());
+
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= lenCols(); j++) {
+                newMatrix.set(i, j, Double.sum(elem, (Double) get(i, j)));
+            }
+        }
+        return newMatrix;
+    }
+    public Matrix<ComplexNum> sumNum(ComplexNum elem) {
+        Matrix<ComplexNum> newMatrix= new Matrix<ComplexNum>(lenRows(), lenCols());
+
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= lenCols(); j++) {
+                newMatrix.set(i, j, elem.sum((ComplexNum) get(i, j)));
+            }
+        }
+        return newMatrix;
+    }
+
+    //subtraction
+    public Matrix<Double> subMatrix(Matrix<Double> secondMatrix) {
+        if(lenCols()!= secondMatrix.lenCols() || lenRows() != secondMatrix.lenRows()) {
+            System.out.println("Problem with subtraction matrix");
+            System.exit(0);
+        }
+
+        Matrix<Double> newMatrix = new Matrix<Double>(lenRows(), secondMatrix.lenCols());
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= secondMatrix.lenCols(); j++) {
+                newMatrix.set(i, j, (Double) this.get(i, j) - secondMatrix.get(i, j));
+            }
+        }
+        return newMatrix;
+    }
+    public Matrix<ComplexNum> subMatrixCom(Matrix<ComplexNum> secondMatrix) {
+        if(lenCols()!= secondMatrix.lenCols() || lenRows() != secondMatrix.lenRows()) {
+            System.out.println("Problem with subtraction matrix");
+            System.exit(0);
+        }
+
+        Matrix<ComplexNum> newMatrix = new Matrix<ComplexNum>(lenRows(), secondMatrix.lenCols());
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= secondMatrix.lenCols(); j++) {
+                newMatrix.set(i, j, ((ComplexNum) this.get(i, j)).sub(secondMatrix.get(i, j)));
+            }
+        }
+        return newMatrix;
+    }
+
+    public Matrix<Double> subNum(Double elem) {
+        Matrix<Double>  newMatrix= new Matrix<Double>(lenRows(), lenCols());
+
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= lenCols(); j++) {
+                newMatrix.set(i, j, Double.sum((Double) get(i, j), -elem));
+            }
+        }
+        return newMatrix;
+    }
+
+    public Matrix<ComplexNum> subNum(ComplexNum elem) {
+        Matrix<ComplexNum>  newMatrix= new Matrix<ComplexNum>(lenRows(), lenCols());
+
+        for(int i = 1; i <= lenRows(); i++) {
+            for(int j = 1; j <= lenCols(); j++) {
+                newMatrix.set(i, j, ((ComplexNum) get(i, j)).sub(elem));
+            }
+        }
+        return newMatrix;
+    }
+
+    public void toStr()  {
         T elem;
         for(int i = 1; i <= lenRows(); i++) {
             System.out.format("[");
@@ -194,7 +308,7 @@ public class Matrix<T extends Number> {
                 if(j > 1)
                     System.out.format(" ");
                 elem = get(i, j);
-                System.out.print(elem);
+                System.out.print(elem.toString());
             }
             System.out.print("]\n");
         }

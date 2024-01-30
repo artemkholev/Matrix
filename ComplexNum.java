@@ -22,10 +22,10 @@ public class ComplexNum {
         if (i > 0) return r + " + " + i + "i";
         return r + " - " + (-i) + "i";
     }
-    double r() {
+    public double r() {
         return r;
     }
-    double i() {
+    public double i() {
         return i;
     }
 
@@ -46,17 +46,24 @@ public class ComplexNum {
 
     public ComplexNum mul(ComplexNum secondNum) {
         ComplexNum firstNum = this;
-        double newR = firstNum.r * secondNum.r + firstNum.i * secondNum.i;
+        double newR = firstNum.r * secondNum.r - firstNum.i * secondNum.i;
         double newI = firstNum.r * secondNum.i + firstNum.i * secondNum.r;
         return new ComplexNum(newR, newI);
     }
 
-    public ComplexNum  revCom() {
-        double scale = r * r + i * i;
-        return new ComplexNum(r / scale, -i / scale);
+    public ComplexNum mulNum(Double secondNum) {
+        ComplexNum firstNum = this;
+        double newR = firstNum.r * secondNum;
+        double newI = firstNum.i * secondNum;
+        return new ComplexNum(newR, newI);
     }
-    public ComplexNum d(ComplexNum secondNum) {
+
+    public ComplexNum div(ComplexNum secondNum) {
         ComplexNum firstNum = this;
         return firstNum.mul(secondNum.revCom());
+    }
+    public ComplexNum  revCom() {
+        double s = this.r * this.r + this.i * this.i;
+        return new ComplexNum(r / s, -i / s);
     }
 }
