@@ -26,38 +26,33 @@ public class ComplexNum {
 
     //operations
     public ComplexNum sum(ComplexNum secondNum) {
-        ComplexNum firstNum = this;
-        double newR = firstNum.r + secondNum.r;
-        double newI = firstNum.i + secondNum.i;
+        double newR = this.r + secondNum.r;
+        double newI = this.i + secondNum.i;
         return new ComplexNum(newR, newI);
     }
 
     public ComplexNum sub(ComplexNum secondNum) {
-        ComplexNum firstNum = this;
-        double newR = firstNum.r - secondNum.r;
-        double newI = firstNum.i - secondNum.i;
+        double newR = this.r - secondNum.r;
+        double newI = this.i - secondNum.i;
         return new ComplexNum(newR, newI);
     }
 
     public ComplexNum mulNum(Double secondNum) {
-        ComplexNum firstNum = this;
-        double newR = firstNum.r * secondNum;
-        double newI = firstNum.i * secondNum;
+        double newR = this.r * secondNum;
+        double newI = this.i * secondNum;
         return new ComplexNum(newR, newI);
     }
 
     public ComplexNum div(ComplexNum secondNum) {
-        ComplexNum firstNum = this;
-        return firstNum.mul(secondNum.revCom());
+        return this.mul(secondNum.revCom());
     }
     public ComplexNum  revCom() {
         double s = this.r * this.r + this.i * this.i;
         return new ComplexNum(r / s, -i / s);
     }
     public ComplexNum mul(ComplexNum secondNum) {
-        ComplexNum firstNum = this;
-        double newR = firstNum.r * secondNum.r - firstNum.i * secondNum.i;
-        double newI = firstNum.r * secondNum.i + firstNum.i * secondNum.r;
+        double newR = this.r * secondNum.r - this.i * secondNum.i;
+        double newI = this.r * secondNum.i + this.i * secondNum.r;
         return new ComplexNum(newR, newI);
     }
 
